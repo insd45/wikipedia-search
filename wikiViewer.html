@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title>Wiki Viewer</title>
+        <style>
+            body {
+                font-family: 'Droid Sans', sans-serif;
+                background-image: url("http://dpeeps.com/wp-content/uploads/2017/06/ios-8-default-spiral-galaxy-iphone-5-desktop-one-two-14.jpg");
+                color: white;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+            
+            #blacc{
+                color: black;
+            }
+            
+            li {
+                list-style-type: none;
+                padding: 18px;
+                margin: 15px;
+                color: black;
+                border: solid white 2px;
+                border-radius: 5px;
+                background-color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="text-center">
+                <h1>Wikipedia Viewer</h1>
+                <h4>Help accessing Wikipedia API from: Coding Tutorials 360</h4>
+                <p>Click here for a <a href="https://en.wikipedia.org/wiki/Special:Random" target="blank">RANDOM</a> article</p>
+                <br>
+                <input style="color:black;" class="from-control" id="searchTerm">
+                <button id="search" type="button" class="btn btn-primary">Search</button>
+            </div>
+            <br>
+            
+            <ul id="output">
+            
+            </ul>
+        </div>
+        
+        <script>
+            $(document).ready(function() {
+                $('#search').click(function(){
+                    $('#output').empty();
+                    var searchTerm = $('#searchTerm').val();
+                    var url = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + searchTerm + "&format=json&callback=?";
+                    
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        async: false,
+                        dataType: "json",
+                        success: function(data){
+                            //Get heading console.log(data[1][0]);
+                            //Get description console.log(data[2][0]);
+                            //Get link console.log(data[3][0]);
+                            for(var i = data[1].length - 1; i >= 0; i--){
+                                $('#output').prepend("<li><a href= "+data[3][i]+">"+data[1][i]+"</a><p>"+data[2][i]+"</p></li>");
+                            }
+                        },
+                        error: function(errorMessage){
+                            alert("Error");
+                        }
+                    });
+                }); 
+            });
+        </script>
+    </body>
+</html>
